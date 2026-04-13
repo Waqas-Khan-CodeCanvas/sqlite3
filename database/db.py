@@ -11,6 +11,7 @@ class Database:
             try:
                 self.conn = sqlite3.connect(DATABASE_NAME)
                 self.cursor = self.conn.cursor()
+                print(f"[DB INFO ] DB connected successfully.") 
             except sqlite3.Error as e:
                 print(f"[DB ERROR] connection failed : {e}") 
                 
