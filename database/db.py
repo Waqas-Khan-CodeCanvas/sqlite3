@@ -1,24 +1,42 @@
 import sqlite3
-
-DATABASE_NAME = "example.db"
+from utils.constants import DATABASE_NAME
+from database.schemas import create_tables
 
 class Database:
-    def __init__(self) -> None:
+    def __init__(self):
         self.conn = None
-        self.cursor = None
-    
+
     def connect(self):
-            try:
-                self.conn = sqlite3.connect(DATABASE_NAME)
-                self.cursor = self.conn.cursor()
-                print(f"[DB INFO ] DB connected successfully.") 
-            except sqlite3.Error as e:
-                print(f"[DB ERROR] connection failed : {e}") 
-                
+        try:
+            self.conn = sqlite3.connect(DATABASE_NAME)
+            self.conn.execute("PRAGMA foreign_keys = ON;")
+            self.conn.row_factory = sqlite3.Row
+            print(f"[DB INFO ] Database connected successfully.")
+            return self.conn
+        except sqlite3.Error as e:
+            print(f"[DB ERROR ] Database connection failed : {e}")
+
+    def get_cursor(self):
+        if not self.conn:
+            self.connect()
+        return self.conn.cursor() # type: ignore
+
+    def commit(self):
+        if self.conn:
+            self.conn.commit()
+
+    def rollback(self):
+        if self.conn:
+            self.conn.rollback()
+    
     def close(self):
-        if self.conn :
+        if self.conn:
             self.conn.close()
 
-db = Database()
+db  = Database()
 
+def initialize_database():
+    db.connect()
+    create_tables(db.get_cursor())
+    
     

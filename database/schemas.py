@@ -1,11 +1,67 @@
+import sqlite3
 
+def create_tables(cursor):
+    tables = {
+        "users": """
+            CREATE TABLE IF NOT EXISTS users(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT UNIQUE NOT NULL,
+                password TEXT NOT NULL,
+                role TEXT NOT NULL DEFAULT 'staff',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """,
 
-def create_tables():
-    sql_query = """
-        CREATE TABLE USER(
-            username char(30) NOT NULL UNIQUE,
-            password char(30) NOT NULL,
-            role char(20) ,
-            isActive char(5) )
+        "products": """
+            CREATE TABLE IF NOT EXISTS products(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                price REAL NOT NULL,
+                stock INTEGER NOT NULL DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """,
+
+        "customers": """
+            CREATE TABLE IF NOT EXISTS customers(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                phone TEXT NOT NULL,
+                email TEXT NOT NULL DEFAULT 'example@gmail.com',
+                address TEXT NOT NULL DEFAULT 'chargulli',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """,
+
+        "orders": """
+            CREATE TABLE IF NOT EXISTS orders(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                customer_id INTEGER,
+                total_amount REAL NOT NULL DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY(customer_id) REFERENCES customers(id)
+            )
+        """,
+
+        "order_items": """
+            CREATE TABLE IF NOT EXISTS order_items(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                order_id INTEGER,
+                product_id INTEGER,
+                quantity INTEGER NOT NULL,
+                price REAL NOT NULL DEFAULT 0,
+                FOREIGN KEY(order_id) REFERENCES orders(id),
+                FOREIGN KEY(product_id) REFERENCES products(id)
+            )
         """
-    
+    }
+
+    for table in tables:
+        try:
+            cursor.execute(tables[table]) # type: ignore
+            print(f"[DB INFO ] {table} table created successfully.")
+        except sqlite3.Error as e:
+            print(f"[DB ERROR ]  {table} table not created : {e}")
+        
+        
+
