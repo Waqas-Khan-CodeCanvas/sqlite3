@@ -1,5 +1,9 @@
 import sqlite3
 
+from config.logger import Logger
+
+log = Logger("Schema")
+
 def create_tables(cursor):
     tables = {
         "users": """
@@ -59,9 +63,9 @@ def create_tables(cursor):
     for table in tables:
         try:
             cursor.execute(tables[table]) # type: ignore
-            print(f"[DB INFO ] {table} table created successfully.")
+            log.success(f"{table} table created successfully.")
         except sqlite3.Error as e:
-            print(f"[DB ERROR ]  {table} table not created : {e}")
+            log.error(f"{table} table not created : {e}")
         
         
 
