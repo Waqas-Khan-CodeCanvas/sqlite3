@@ -5,8 +5,8 @@ class Logger:
         self.name = name
 
     def _log(self, level, message):
-        time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        print(f"[{time}] [{self.name}] [{level}] {message}")
+        timestamp = datetime.now().strftime("%A %d-%B-%Y %H:%M:%S %p")
+        print(f"[{timestamp}] [{self.name}-{level}] {message}")
 
     def info(self, message):
         self._log("INFO", message)
@@ -23,15 +23,3 @@ class Logger:
     def debug(self, message):
         self._log("DEBUG", message)
         
-        
-        
-# usecase 
-# from logger import Logger
-
-# log = Logger("MY_APP")
-
-# log.info("Application started")
-# log.success("Data loaded successfully")
-# log.warning("This is a warning")
-# log.error("Something went wrong")
-# log.debug("Debugging details here") 
