@@ -1,18 +1,18 @@
 import sqlite3
-
 from config.logger import Logger
 
-log = Logger("Schema")
-
+log = Logger("DB")
 def create_tables(cursor):
     tables = {
-        "users": """
+        "users":"""
             CREATE TABLE IF NOT EXISTS users(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 username TEXT UNIQUE NOT NULL,
                 password TEXT NOT NULL,
-                role TEXT NOT NULL DEFAULT 'staff',
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                role TEXT NOT NULL CHECK(role IN ('admin','staff')) DEFAULT 'staff',
+                is_active INTEGER NOT NULL DEFAULT 1,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """,
 
@@ -63,9 +63,9 @@ def create_tables(cursor):
     for table in tables:
         try:
             cursor.execute(tables[table]) # type: ignore
-            log.success(f"{table} table created successfully.")
+            log.success(f"[DB INFO ] {table} table created successfully.")
         except sqlite3.Error as e:
-            log.error(f"{table} table not created : {e}")
+            log.error(f"[DB ERROR ]  {table} table not created : {e}")
         
         
 
