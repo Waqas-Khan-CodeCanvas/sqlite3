@@ -26,3 +26,14 @@ class UserAuthService:
         except Exception as e:
             raise Exception(f"Registration failed: {e}")
         
+    def login(self , username , password):
+        
+        login_user = user.get_by_username(username)   
+        if not login_user:
+            raise Exception("User not found")
+        if not verify_password(password , login_user["password"]):
+            raise Exception("Invalid credentials")
+        
+        return dict(login_user)
+    
+   
