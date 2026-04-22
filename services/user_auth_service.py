@@ -36,4 +36,10 @@ class UserAuthService:
         
         return dict(login_user)
     
-   
+    def logout(self, user_id):
+        try:
+            user.deactivate(user_id)
+            db.commit()
+        except Exception:
+            db.rollback()
+            raise Exception("Failed to deactivate user")
