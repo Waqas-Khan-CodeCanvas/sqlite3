@@ -1,9 +1,11 @@
 from database.db import initialize_database
+from services.user_auth_service import UserAuthService
 from repository.user_repository import UserRepository
 from config.logger import Logger
 
 log = Logger("App")
 
+auth = UserAuthService()
 user = UserRepository()
 
 def initApp():
@@ -11,8 +13,9 @@ def initApp():
     print("app is running.")
     while True:
         print("""
-            1 : - create user
-            2 : - deactivate user
+            0 : - Register user
+            1 : - login user
+            2 : - logout user
             3 : - check user
             4 : - get user by name user
             5 : - get user by id user
@@ -21,21 +24,28 @@ def initApp():
             
         """)
         user_choice = input("Enter you choice (1,2,3,4,5,6) : ")
-        if user_choice == "1":
+        if user_choice == "0":
             username = input("enter username :")
             password = input("enter user password:")
             role = input("enter user role :")
             if role != "":
-                result = user.create(username  , password , role=role)
+                result = auth.register(username  , password , role=role)
                 log.success(result)
                 
-            result = user.create(username , password )
+            result = auth.register(username  , password)
             log.success(result)
             
+        elif user_choice == "1":
+            
+            username = input("enter username :")
+            password = input("enter user password:")
+            
+            result = auth.login(username  , password)
+            log.success(result)    
             
         elif user_choice == "2":
             user_id = input("enter user id :")
-            result = user.deactivate(user_id)
+            result = auth.logout(user_id)
             log.success(result)
             
         elif user_choice == "3":
