@@ -19,16 +19,20 @@ class UserRepository:
         except sqlite3.Error as e:
             log.error(f"user creation falied : {e}")
     
-    def get_by_username(self , username):
+    def get_by_username(self, username):
         try:
             cursor = db.get_cursor()
             cursor.execute(
-                "SELECT * FROM users WHERE username  = ? AND  is_Active = 1",
+                "SELECT * FROM users WHERE username = ? AND is_Active = 1",
                 (username,)
             )
-            return cursor.fetchone()
+            row = cursor.fetchone()
+
+            return dict(row) if row else None
+
         except sqlite3.Error as e:
-            log.error(f"get user by username falied : {e}")
+            log.error(f"get user by username failed: {e}")
+            return None
     
     def get_by_userId(self , user_id):
         try:
