@@ -36,4 +36,12 @@ class UserServices:
         
         return users 
         
-    
+    def check_user(self , username):
+        if not username:
+            raise Exception("username required.")
+        
+        user = User.get_by_username(username)
+        if not user:
+            raise Exception("user not found.")
+        
+        return user
