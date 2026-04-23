@@ -28,4 +28,12 @@ class UserServices:
             raise Exception("user not found.")
         
         return user 
-  
+    
+    def get_all(self):
+        users = User.get_all()
+        if not users:
+            raise Exception("users not found.")
+        
+        return users 
+        
+    
