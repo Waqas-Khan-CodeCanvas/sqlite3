@@ -1,12 +1,12 @@
 from database.db import initialize_database
 from services.user_auth_service import UserAuthService
-from repository.user_repository import UserRepository
+from services.user_opra_services import UserServices
 from config.logger import Logger
 
 log = Logger("App")
 
 auth = UserAuthService()
-user = UserRepository()
+User = UserServices()
 
 def initApp():
     initialize_database()
@@ -20,8 +20,8 @@ def initApp():
             4 : - get user by name user
             5 : - get user by id user
             6 : - get all users
-            7 : - exit
-            
+            7 : - check user
+            8 : - exit
         """)
         user_choice = input("Enter you choice (1,2,3,4,5,6) : ")
         if user_choice == "0":
@@ -50,25 +50,25 @@ def initApp():
             
         elif user_choice == "3":
             username = input("enter username :")
-            result = user.exists(username)
+            result = User.check_user(username)
             log.success(result)
             
         elif user_choice == "4":
             username = input("enter username :")
-            result = user.get_by_username(username)
+            result = User.get_by_username(username)
             log.success(result)
             
         elif user_choice == "5":
             id = input("enter id :")
-            result = user.get_by_userId(id)
+            result = User.get_by_userId(id)
             log.success(result)
             
         elif user_choice == "6":
-            records = user.get_all() or {}
+            records = User.get_all() or {}
             for record in records: # type: ignore
                 print(f" user id : {record["id"]} , username : {record["username"]} , role {record["role"]}")
             
-        elif user_choice == "7":
+        elif user_choice == "8":
             log.success("thanks for using the system.")
             break    
         else:
