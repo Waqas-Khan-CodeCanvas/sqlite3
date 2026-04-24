@@ -42,4 +42,18 @@ class ProductRepository:
         except sqlite3.Error as e:
             log.error(f"Get all products failed: {e}")
 
-    
+    def update(self, product_id, name, price, stock):
+        try:
+            cursor = db.get_cursor()
+            cursor.execute(
+                """
+                UPDATE products
+                SET name = ?, price = ?, stock = ?
+                WHERE id = ?
+                """,
+                (name, price, stock, product_id)
+            )
+            db.commit()
+            return True
+        except sqlite3.Error as e:
+            log.error(f"Update product failed: {e}")
