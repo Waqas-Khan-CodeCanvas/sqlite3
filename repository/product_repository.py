@@ -57,3 +57,15 @@ class ProductRepository:
             return True
         except sqlite3.Error as e:
             log.error(f"Update product failed: {e}")
+
+    def delete(self, product_id):
+        try:
+            cursor = db.get_cursor()
+            cursor.execute(
+                "DELETE FROM products WHERE id = ?",
+                (product_id,)
+            )
+            db.commit()
+            return True
+        except sqlite3.Error as e:
+            log.error(f"Delete product failed: {e}")
