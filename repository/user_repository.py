@@ -7,7 +7,7 @@ log = Logger("Repository")
 
 class UserRepository:
     
-    def create(self , username , password , role="staff"):
+    def create(self , username , password , role):
         try:
             cursor = db.get_cursor()
             cursor.execute(
