@@ -15,7 +15,7 @@ class UserAuthService:
         if user.exists(username):
             raise Exception("Username already exists")
         if len(password) < 6 :
-            raise Exception("Username already existsPassword must be at least 6 characters")
+            raise Exception("Password must be at least 6 characters")
         
         hashed_password = hash_password(password)
         try:
