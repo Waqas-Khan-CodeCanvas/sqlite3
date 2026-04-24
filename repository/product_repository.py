@@ -33,4 +33,13 @@ class ProductRepository:
             log.error(f"Get product by id failed: {e}")
             return None
 
+    def get_all(self):
+        try:
+            cursor = db.get_cursor()
+            cursor.execute("SELECT * FROM products")
+            rows = cursor.fetchall()
+            return [dict(row) for row in rows]
+        except sqlite3.Error as e:
+            log.error(f"Get all products failed: {e}")
+
     
