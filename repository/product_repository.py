@@ -20,3 +20,17 @@ class ProductRepository:
         except sqlite3.Error as e:
             log.error(f"Product creation failed: {e}")
 
+    def get_by_id(self, product_id):
+        try:
+            cursor = db.get_cursor()
+            cursor.execute(
+                "SELECT * FROM products WHERE id = ?",
+                (product_id,)
+            )
+            row = cursor.fetchone()
+            return dict(row) if row else None
+        except sqlite3.Error as e:
+            log.error(f"Get product by id failed: {e}")
+            return None
+
+    
